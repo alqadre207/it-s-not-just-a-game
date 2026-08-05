@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Mission Briefing</title>
+
+<style>
+
+body{
+background:#000;
+color:#00ff88;
+font-family:Consolas,monospace;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+margin:0;
+}
+
+.box{
+width:80%;
+max-width:700px;
+text-align:center;
+}
+
+button{
+margin-top:40px;
+padding:15px 35px;
+background:transparent;
+border:2px solid #00ff88;
+color:#00ff88;
+font-size:20px;
+cursor:pointer;
+transition:.3s;
+}
+
+button:hover{
+background:#00ff88;
+color:black;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="box">
+
+<h1>MISSION BRIEFING</h1>
+
+<p id="text"></p>
+
+
+<button id="continueBtn" onclick="startMission()" style="display:none;">
+INITIALIZE MISSION
+</button>
+
+</div>
+
+<script src="../audio-manager.js"></script>
+<script>
+const text = document.getElementById("text");
+
+const messages = [
+    "Before you can access the secret file, you must complete all three security challenges.",
+    "",
+    "*Failure is not an option*",
+    "",
+    "",
+    "SYSTEM LOG #001",
+    "",
+    "Corrupted data recovered...",
+    "",
+    "Only one record was readable...",
+    "",
+    "AUTHORIZED ID → h****"
+];
+
+let line = 0;
+let letter = 0;
+
+function typeWriter(){
+
+    if(line >= messages.length){
+
+        setTimeout(()=>{
+            document.getElementById("continueBtn").style.display="inline-block";
+        },800);
+
+        return;
+    }
+
+    if(letter < messages[line].length){
+
+        text.innerHTML += messages[line].charAt(letter);
+    
+        letter++;
+
+        setTimeout(typeWriter,70);
+
+    }else{
+
+        text.innerHTML += "<br>";
+
+        line++;
+        letter = 0;
+
+        // توقفات بين الأسطر
+        let delay = 300;
+
+        if(line == 3) delay = 1200;   // بعد "Failure is not an option."
+        if(line == 5) delay = 1800;   // قبل SYSTEM LOG
+        if(line == 9) delay = 1200;   // قبل "Only one record..."
+        if(line == 11) delay = 1500;  // قبل AUTHORIZED ID
+
+        setTimeout(typeWriter, delay);
+
+    }
+
+}
+
+typeWriter();
+
+function startMission(){
+
+window.location.href="challenge1.html";
+
+}
+
+</script>
+</body>
+</html>
